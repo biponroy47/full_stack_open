@@ -17,34 +17,65 @@ const App = () => {
   const [neutral, setNeutral] = useState(0);
   const [bad, setBad] = useState(0);
 
-  const clickedGood = () => {
+  const [all, setAll] = useState(0);
+  const [average, setAverage] = useState(0);
+  const [positive, setPositive] = useState(0);
+
+  const updateGood = () => {
     const newGood = good + 1;
     setGood(newGood);
-    console.log("Good clicked, new good count:", newGood);
+
+    const newAll = all + 1;
+    setAll(newAll);
+
+    const newAverage = (newGood - bad) / newAll;
+    setAverage(newAverage);
+
+    const newPositive = (newGood / newAll) * 100;
+    setPositive(newPositive);
   };
 
-  const clickedNeutral = () => {
+  const updateNeutral = () => {
     const newNeutral = neutral + 1;
     setNeutral(newNeutral);
-    console.log("Neutral clicked, new neutral count:", newNeutral);
+
+    const newAll = all + 1;
+    setAll(newAll);
+
+    const newAverage = (good - bad) / newAll;
+    setAverage(newAverage);
+
+    const newPositive = (good / newAll) * 100;
+    setPositive(newPositive);
   };
 
-  const clickedBad = () => {
+  const updateBad = () => {
     const newBad = bad + 1;
     setBad(newBad);
-    console.log("Bad clicked, new bad count:", newBad);
+
+    const newAll = all + 1;
+    setAll(newAll);
+
+    const newAverage = (good - newBad) / newAll;
+    setAverage(newAverage);
+
+    const newPositive = (good / newAll) * 100;
+    setPositive(newPositive);
   };
 
   return (
     <div>
       <Header text='Give Feedback' />
-      <Button handleClick={clickedGood} text={"Good"} />
-      <Button handleClick={clickedNeutral} text={"Neutral"} />
-      <Button handleClick={clickedBad} text={"Bad"} />
+      <Button handleClick={updateGood} text={"Good"} />
+      <Button handleClick={updateNeutral} text={"Neutral"} />
+      <Button handleClick={updateBad} text={"Bad"} />
       <Header text='Statistics' />
       <Text type='Good' value={good} />
       <Text type='Neutral' value={neutral} />
       <Text type='Bad' value={bad} />
+      <Text type='All' value={all} />
+      <Text type='Average' value={average} />
+      <Text type='Positive' value={positive} />
     </div>
   );
 };
