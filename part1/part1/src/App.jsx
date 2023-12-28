@@ -121,6 +121,54 @@
 //   return;
 // };
 
-const App = () => {};
+// const App = () => {
+//   const arto = {
+//     name: "Arto Hellas",
+//     age: 35,
+//     education: "PhD",
+//     greet: function () {
+//       console.log("hello, my name is " + this.name);
+//     },
+//     add: function (a, b) {
+//       console.log(a + b);
+//     },
+//   };
+
+//   setTimeout(arto.greet.bind(arto), 1000); //preserving "this" in object
+
+//   //   arto.growOlder = function () {
+//   //     this.age += 1;
+//   //   };
+//   //   console.log(arto.age);
+//   //   arto.growOlder();
+//   //   console.log(arto.age);
+
+//   //   arto.add(2, 4);
+
+//   //   const referenceAdd = arto.add; //no brackets when referencing
+//   //   referenceAdd(5, 10);
+
+//   //   const referenceGreet = arto.greet;
+//   //   referenceGreet();
+// };
+
+//--------------------------------------------
+
+const App = () => {
+  class Person {
+    constructor(name, age) {
+      this.name = name;
+      this.age = age;
+    }
+
+    greet() {
+      console.log("Hello, my name is ", this.name);
+    }
+  }
+
+  const adam = new Person("Adam", 42);
+  adam.greet();
+  return;
+};
 
 export default App;
