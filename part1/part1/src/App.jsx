@@ -154,21 +154,139 @@
 
 //--------------------------------------------
 
+// const App = () => {
+//   class Person {
+//     constructor(name, age) {
+//       this.name = name;
+//       this.age = age;
+//     }
+
+//     greet() {
+//       console.log("Hello, my name is ", this.name);
+//     }
+//   }
+
+//   const adam = new Person("Adam", 42);
+//   adam.greet();
+//   return;
+// };
+
+// const Hello = (props) => {
+//   const bornYear = () => {
+//     const yearNow = new Date().getFullYear();
+//     return yearNow - props.age;
+//   };
+
+//   // const bornYear = function () {
+//   //   return new Date().getFullYear() - props.age;
+//   // };
+//   return (
+//     <div>
+//       <p>
+//         Hello {props.name}, you are {props.age} years old
+//       </p>
+//       <p>You were born in {bornYear()}</p>
+//     </div>
+//   );
+// };
+
+// const App = () => {
+//   const name = "Peter";
+//   const age = 10;
+
+//   return (
+//     <div>
+//       <h1>Greetings</h1>
+//       <Hello name='Maya' age={26 + 10} />
+//       <Hello name={name} age={age} />
+//     </div>
+//   );
+// };
+//---------------------------------------------------
+
+// const Hello = ({ name, age }) => {
+//   //directly destructured
+//   // const name = props.name;
+//   // const age = props.age;
+
+//   //const { name, age } = props; //destructuring object props
+
+//   const bornYear = () => new Date().getFullYear() - age;
+//   return (
+//     <div>
+//       <p>
+//         Hello {name} you are {age} years old, you were probably born in{" "}
+//         {bornYear()}
+//       </p>
+//     </div>
+//   );
+// };
+
+// const App = () => {
+//   return <Hello name='Bipon' age={20} />;
+// };
+//----------------------------------------------
+
+// const App = (props) => {
+//   const { counter } = props;
+//   return <div>{counter}</div>;
+// };
+//----------------------------------------------
+
+// import { useState } from "react";
+
+// const App = () => {
+//   const [counter, setCounter] = useState(0);
+//   setTimeout(() => setCounter(counter + 1), 1000);
+//   console.log("rendering...", counter);
+//   return (
+//     <div>
+//       <p>{counter}</p>
+//     </div>
+//   );
+// };
+//----------------------------------------
+import { useState } from "react";
+
 const App = () => {
-  class Person {
-    constructor(name, age) {
-      this.name = name;
-      this.age = age;
-    }
+  const [counter, setCounter] = useState(0);
+  console.log("-------\nnew value: ", counter);
 
-    greet() {
-      console.log("Hello, my name is ", this.name);
-    }
-  }
+  // const handleClick = () => {
+  //   console.log("clicked");
+  // };
+  // return (
+  //   <div>
+  //     <button onClick={handleClick}>click</button>
+  //   </div>
+  // );
+  const Display = ({ counter }) => <div>{counter}</div>;
 
-  const adam = new Person("Adam", 42);
-  adam.greet();
-  return;
+  const add = () => {
+    console.log("add one, old = ", counter);
+    setCounter(counter + 1);
+  };
+  const minus = () => {
+    console.log("minus one, value = ", counter);
+    setCounter(counter - 1);
+  };
+
+  const reset = () => {
+    //console.log("resetting, old = ", counter);
+    setCounter(0);
+  };
+
+  const Button = ({ onClick, text }) => (
+    <button onClick={onClick}>{text}</button>
+  );
+  return (
+    <div>
+      <Display counter={counter} />
+      <Button onClick={add} text='plus' />
+      <Button onClick={reset} text='reset' />
+      <Button onClick={minus} text='minus' />
+    </div>
+  );
 };
 
 export default App;
