@@ -246,47 +246,158 @@
 //   );
 // };
 //----------------------------------------
+// import { useState } from "react";
+
+// const App = () => {
+//   const [counter, setCounter] = useState(0);
+//   console.log("-------\nnew value: ", counter);
+
+//   // const handleClick = () => {
+//   //   console.log("clicked");
+//   // };
+//   // return (
+//   //   <div>
+//   //     <button onClick={handleClick}>click</button>
+//   //   </div>
+//   // );
+//   const Display = ({ counter }) => <div>{counter}</div>;
+
+//   const add = () => {
+//     console.log("add one, old = ", counter);
+//     setCounter(counter + 1);
+//   };
+//   const minus = () => {
+//     console.log("minus one, value = ", counter);
+//     setCounter(counter - 1);
+//   };
+
+//   const reset = () => {
+//     console.log("resetting, old = ", counter); //including this makes it synchronous
+//     setCounter(0);
+//   };
+
+//   const Button = ({ onClick, text }) => (
+//     <button onClick={onClick}>{text}</button>
+//   );
+//   return (
+//     <div>
+//       <Display counter={counter} />
+//       <Button onClick={add} text='plus' />
+//       <Button onClick={reset} text='reset' />
+//       <Button onClick={minus} text='minus' />
+//     </div>
+//   );
+// };
+//-------------------------------------------------------
+
+// import { useState } from "react";
+
+// const App = () => {
+//   const [clicks, setClicks] = useState({
+//     left: 0,
+//     right: 0,
+//   });
+
+//   const leftClick = () => {
+//     setClicks({ ...clicks, left: clicks.left + 1 });
+//     // clicks.left++; //can not mutate state directly!
+//     // setClicks(clicks);
+//   };
+
+//   const rightClick = () => {
+//     setClicks({ ...clicks, right: clicks.right + 1 });
+//     // clicks.right++;
+//     // setClicks(clicks);
+//   };
+
+//   return (
+//     <div>
+//       {clicks.left}
+//       <button onClick={leftClick}>LEFT</button>
+//       <button onClick={rightClick}>RIGHT</button>
+//       {clicks.right}
+//     </div>
+//   );
+// };
+//------------------------------------
+// import { useState } from "react";
+
+// const History = (props) => {
+//   if (props.allClicks.length === 0) {
+//     return <div>no clicks yet, use the buttons</div>;
+//   }
+//   return <div>buttons clicked: {props.allClicks.join(" ")}</div>;
+// };
+
+// const Button = ({ handleClick, text }) => {
+//   return <button onClick={handleClick}>{text}</button>;
+// };
+
+// const App = () => {
+//   const [left, setLeft] = useState(0);
+//   const [right, setRight] = useState(0);
+//   const [allClicks, setAll] = useState([]);
+//   const [total, setTotal] = useState(0);
+
+//   const leftClick = () => {
+//     setAll(allClicks.concat("L"));
+//     const newLeft = left + 1;
+//     setLeft(newLeft);
+//     setTotal(newLeft + right);
+//   };
+
+//   const rightClick = () => {
+//     setAll(allClicks.concat("R"));
+//     const newRight = right + 1;
+//     setRight(newRight);
+//     setTotal(left + newRight);
+//   };
+
+//   return (
+//     <div>
+//       {left}
+//       <Button handleClick={leftClick} text='left' />
+//       <Button handleClick={rightClick} text='right' />
+//       {right}
+//       <History allClicks={allClicks} />
+//       <p>{total}</p>
+//     </div>
+//   );
+// };
+//---------------------------------------
+
 import { useState } from "react";
 
-const App = () => {
-  const [counter, setCounter] = useState(0);
-  console.log("-------\nnew value: ", counter);
+const Display = (props) => <div>{props.value}</div>;
 
-  // const handleClick = () => {
-  //   console.log("clicked");
-  // };
+const Button = ({ handleClick, text }) => {
+  return <button onClick={handleClick}>{text}</button>;
+};
+
+const App = () => {
+  //const hello = (who) => () => console.log("hello ", who);
   // return (
   //   <div>
-  //     <button onClick={handleClick}>click</button>
+  //     {value}
+  //     <button onClick={hello("world")}>button</button>
+  //     <button onClick={hello("bipon")}>button</button>
+  //     <button onClick={hello("jeff")}>button</button>
   //   </div>
   // );
-  const Display = ({ counter }) => <div>{counter}</div>;
 
-  const add = () => {
-    console.log("add one, old = ", counter);
-    setCounter(counter + 1);
-  };
-  const minus = () => {
-    console.log("minus one, value = ", counter);
-    setCounter(counter - 1);
+  const [value, setValue] = useState(0);
+  const setToValue = (newValue) => () => {
+    console.log("value now", newValue);
+    setValue(newValue);
   };
 
-  const reset = () => {
-    //console.log("resetting, old = ", counter);
-    setCounter(0);
-  };
-
-  const Button = ({ onClick, text }) => (
-    <button onClick={onClick}>{text}</button>
-  );
   return (
     <div>
-      <Display counter={counter} />
-      <Button onClick={add} text='plus' />
-      <Button onClick={reset} text='reset' />
-      <Button onClick={minus} text='minus' />
+      <Display value={value} />
+      <Button handleClick={setToValue(value + 1)} text='plus 1' />
+      <Button handleClick={setToValue(0)} text='reset' />
+      <Button handleClick={setToValue(value - 1)} text='minus 1' />
     </div>
   );
 };
-
 export default App;
