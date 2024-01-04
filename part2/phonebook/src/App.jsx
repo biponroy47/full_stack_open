@@ -18,7 +18,6 @@ const PersonForm = (props) => {
     newNumber,
     handleNumberChange,
   } = props;
-
   return (
     <div>
       <form onSubmit={addPerson}>
