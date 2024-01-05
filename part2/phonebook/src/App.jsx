@@ -1,62 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-
-const Filter = (props) => {
-  const { handleFilterChange } = props;
-  return (
-    <div>
-      Filter: <input onChange={handleFilterChange} />
-    </div>
-  );
-};
-
-const PersonForm = (props) => {
-  const {
-    addPerson,
-    newName,
-    handleNameChange,
-    newNumber,
-    handleNumberChange,
-  } = props;
-  return (
-    <div>
-      <form onSubmit={addPerson}>
-        <div>
-          Name: <input value={newName} onChange={handleNameChange} />
-        </div>
-        <div>
-          Number: <input value={newNumber} onChange={handleNumberChange} />
-        </div>
-        <div>
-          <button type='submit'>add</button>
-        </div>
-      </form>
-    </div>
-  );
-};
-
-const Persons = (props) => {
-  const { filter, persons } = props;
-  return (
-    <div>
-      {filter === ""
-        ? persons.map((person) => (
-            <p key={person.id}>
-              {person.name} {person.number}
-            </p>
-          ))
-        : persons
-            .filter((person) =>
-              person.name.toLowerCase().includes(filter.toLowerCase())
-            )
-            .map((person) => (
-              <p key={person.id}>
-                {person.name} {person.number}
-              </p>
-            ))}
-    </div>
-  );
-};
+import personService from "./services/persons";
+import { Filter, PersonForm, Persons } from "./components";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -65,25 +10,49 @@ const App = () => {
   const [filter, setFilter] = useState("");
 
   useEffect(() => {
-    axios.get("http://localhost:3001/persons").then((response) => {
-      setPersons(response.data);
+    personService.getAll().then((personsData) => {
+      setPersons(personsData);
     });
   }, []);
 
   const addPerson = (event) => {
     event.preventDefault();
-
     if (persons.filter((person) => person.name === newName).length > 0) {
-      alert(`${newName} already added to phonebook.`);
-      clearInputs();
+      if (window.confirm(`${newName} already exists, replace number?`)) {
+        const oldPerson = persons.filter((person) => person.name === newName);
+        const newPerson = {
+          name: newName,
+          number: newNumber,
+        };
+        personService
+          .update(oldPerson[0].id, newPerson)
+          .then((updatedPerson) => {
+            setPersons(
+              persons.map((person) =>
+                person.id !== updatedPerson.id ? person : updatedPerson
+              )
+            );
+          });
+        clearInputs();
+      } else clearInputs();
     } else {
       const newPerson = {
         name: newName,
         number: newNumber,
-        id: persons.length + 1,
       };
-      setPersons(persons.concat(newPerson));
+      personService.create(newPerson).then((addedPerson) => {
+        setPersons(persons.concat(addedPerson));
+      });
       clearInputs();
+    }
+  };
+
+  const deletePerson = (id) => {
+    const thisPerson = persons.filter((person) => person.id === id);
+    if (window.confirm(`Delete ${thisPerson[0].name}?`)) {
+      personService.remove(id).then((deletedPerson) => {
+        setPersons(persons.filter((person) => person.id !== id));
+      });
     }
   };
 
@@ -110,7 +79,7 @@ const App = () => {
         handleNumberChange={handleNumberChange}
       />
       <h2>Numbers</h2>
-      <Persons filter={filter} persons={persons} />
+      <Persons filter={filter} persons={persons} deletePerson={deletePerson} />
     </div>
   );
 };
