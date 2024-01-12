@@ -69,11 +69,6 @@
       "content": "3",
       "important": true,
       "id": 14
-    },
-    {
-      "content": "hello",
-      "important": false,
-      "id": 15
     }
   ]
 }
