@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import personService from "./services/persons";
-import { Filter, PersonForm, Persons } from "./components";
+import { Filter, PersonForm, Persons, Notification } from "./components";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filter, setFilter] = useState("");
+  const [newNotification, setNotification] = useState(null);
 
   useEffect(() => {
     personService.getAll().then((personsData) => {
@@ -32,7 +32,18 @@ const App = () => {
                 person.id !== updatedPerson.id ? person : updatedPerson
               )
             );
+          })
+          .catch((error) => {
+            setNotification(`"${newPerson.name}" does not exist!`);
+            setTimeout(() => {
+              setNotification(null);
+            }, 3000);
           });
+        setNotification(`"${newPerson.name}" has been updated.`);
+        setTimeout(() => {
+          setNotification(null);
+        }, 3000);
+
         clearInputs();
       } else clearInputs();
     } else {
@@ -43,6 +54,10 @@ const App = () => {
       personService.create(newPerson).then((addedPerson) => {
         setPersons(persons.concat(addedPerson));
       });
+      setNotification(`"${newPerson.name}" has been added.`);
+      setTimeout(() => {
+        setNotification(null);
+      }, 3000);
       clearInputs();
     }
   };
@@ -50,9 +65,21 @@ const App = () => {
   const deletePerson = (id) => {
     const thisPerson = persons.filter((person) => person.id === id);
     if (window.confirm(`Delete ${thisPerson[0].name}?`)) {
-      personService.remove(id).then((deletedPerson) => {
-        setPersons(persons.filter((person) => person.id !== id));
-      });
+      personService
+        .remove(id)
+        .then((deletedPerson) => {
+          setPersons(persons.filter((person) => person.id !== id));
+        })
+        .catch((error) => {
+          setNotification(`"${thisPerson[0].name}" does not exist!.`);
+          setTimeout(() => {
+            setNotification(null);
+          }, 3000);
+        });
+      setNotification(`"${thisPerson[0].name}" has been deleted.`);
+      setTimeout(() => {
+        setNotification(null);
+      }, 3000);
     }
   };
 
@@ -69,6 +96,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
+      <Notification message={newNotification} />
       <Filter handleFilterChange={handleFilterChange} />
       <h2>Add a New Number</h2>
       <PersonForm
