@@ -1,31 +1,45 @@
 import { useState, useEffect } from "react";
 import countriesService from "./services/countries";
 
-const CountriesDisplay = ({ countries, filter }) => {
-  const filtered = countries.filter((country) =>
-    country.name.common.toUpperCase().includes(filter.toUpperCase())
-  );
+const CountriesDisplay = ({ filtered }) => {
+  const [currentCountry, setCurrentCountry] = useState(0);
+  const [show, setShow] = useState(false);
 
-  console.log(filtered);
-
-  if (filtered.length === 1)
+  const Country = ({ index }) => {
     return (
       <div>
-        <h1>{filtered[0].name.common}</h1>
-        <p>Capital: {filtered[0].capital[0]}</p>
-        <p>Area: {filtered[0].area}</p>
+        <h1>{filtered[index].name.common}</h1>
+        <p>Capital: {filtered[index].capital[0]}</p>
+        <p>Area: {filtered[index].area}</p>
         <b>Languages:</b>
         <ul>
-          {Object.keys(filtered[0].languages).map((key) => (
-            <li key={key}>{filtered[0].languages[key]}</li>
+          {Object.keys(filtered[index].languages).map((key) => (
+            <li key={key}>{filtered[index].languages[key]}</li>
           ))}
         </ul>
-        <img src={filtered[0].flags.png} alt='' />
+        <img src={filtered[index].flags.png} alt='' />
       </div>
     );
-  else if (filtered.length > 1 && filtered.length < 10) {
+  };
+
+  const showCountry = (index) => {
+    setShow(true);
+    setCurrentCountry(index);
+    setTimeout(() => setShow(false), 3000);
+  };
+
+  if (show === true) return <Country index={currentCountry} />;
+  else if (filtered.length === 1) {
+    () => setCurrentCountry(0);
+    return <Country index={currentCountry} />;
+  } else if (filtered.length > 1 && filtered.length < 10) {
     return filtered.map((country, index) => (
-      <p key={index}>{country.name.common}</p>
+      <div key={index}>
+        <p>
+          {country.name.common}{" "}
+          <button onClick={() => showCountry(index)}>Show</button>
+        </p>
+      </div>
     ));
   } else return <p>Too many countries, please specify.</p>;
 };
@@ -33,6 +47,7 @@ const CountriesDisplay = ({ countries, filter }) => {
 const App = () => {
   const [filter, setFilter] = useState("");
   const [countries, setCountries] = useState([]);
+  const [filtered, setFiltered] = useState([]);
 
   useEffect(() => {
     countriesService
@@ -47,7 +62,12 @@ const App = () => {
 
   const handleFilterChange = (event) => {
     const newFilter = event.target.value;
-    setFilter(event.target.value);
+    setFiltered(
+      countries.filter((country) =>
+        country.name.common.toUpperCase().includes(newFilter.toUpperCase())
+      )
+    );
+    setFilter(newFilter);
   };
 
   return (
@@ -55,7 +75,7 @@ const App = () => {
       <form>
         Find Countries: <input value={filter} onChange={handleFilterChange} />
       </form>
-      <CountriesDisplay countries={countries} filter={filter} />
+      <CountriesDisplay filtered={filtered} />
     </div>
   );
 };
