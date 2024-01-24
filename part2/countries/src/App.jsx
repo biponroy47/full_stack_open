@@ -1,11 +1,26 @@
 import { useState, useEffect } from "react";
 import countriesService from "./services/countries";
+import weatherService from "./services/weather";
 
 const CountriesDisplay = ({ filtered }) => {
   const [currentCountry, setCurrentCountry] = useState(0);
   const [show, setShow] = useState(false);
 
   const Country = ({ index }) => {
+    const [temp, setTemp] = useState(0);
+    const [wind, setWind] = useState(0);
+    const [image, setImage] = useState("");
+    const lat = filtered[index].latlng[0];
+    const lon = filtered[index].latlng[1];
+
+    useEffect(() => {
+      weatherService.getData(lat, lon).then((apiData) => {
+        setTemp(apiData.current.temp);
+        setWind(apiData.current.wind_speed);
+        setImage(apiData.current.weather[0].icon);
+      });
+    }, []);
+
     return (
       <div>
         <h1>{filtered[index].name.common}</h1>
@@ -18,6 +33,10 @@ const CountriesDisplay = ({ filtered }) => {
           ))}
         </ul>
         <img src={filtered[index].flags.png} alt='' />
+        <h1>Weather in {filtered[index].name.common}</h1>
+        <h5>Temperature {temp} celsius</h5>
+        <img src={`https://openweathermap.org/img/wn/${image}@2x.png`} alt='' />
+        <h5>Wind {wind} m/s</h5>
       </div>
     );
   };
