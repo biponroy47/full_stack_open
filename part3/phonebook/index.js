@@ -1,6 +1,15 @@
 const express = require("express");
+const morgan = require("morgan");
 const app = express();
+
 app.use(express.json());
+app.use((request, response, next) => {
+  if (request.method === "POST") {
+    morgan("tiny")(request, response, next);
+  } else {
+    next();
+  }
+});
 
 let persons = [
   {
@@ -62,7 +71,7 @@ const generateID = () => {
   return Math.floor(Math.random() * maxID ** maxID);
 };
 
-app.post("/api/notes", (request, response) => {
+app.post("/api/persons", (request, response) => {
   const body = request.body;
   if (!body.name) {
     return response.status(400).json({
