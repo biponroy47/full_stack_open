@@ -1,15 +1,7 @@
 const express = require("express");
+const cors = require("cors");
 const morgan = require("morgan");
 const app = express();
-
-app.use(express.json());
-app.use((request, response, next) => {
-  if (request.method === "POST") {
-    morgan("tiny")(request, response, next);
-  } else {
-    next();
-  }
-});
 
 let persons = [
   {
@@ -33,6 +25,25 @@ let persons = [
     number: "39-23-6423122",
   },
 ];
+
+const requestLogger = (request, response, next) => {
+  console.log("Method: ", request.method);
+  console.log("Path: ", request.path);
+  console.log("Body: ", request.body);
+  console.log("---");
+  next();
+};
+
+app.use(cors());
+app.use(express.json());
+app.use(requestLogger);
+app.use((request, response, next) => {
+  if (request.method === "POST") {
+    morgan("tiny")(request, response, next);
+  } else {
+    next();
+  }
+});
 
 app.get("/", (request, response) => {
   response.send("<h1>Phonebook REST Application.</h1>");
@@ -68,7 +79,7 @@ app.delete("/api/persons/:id", (request, response) => {
 const generateID = () => {
   const maxID =
     persons.length > 0 ? Math.max(...persons.map((person) => person.id)) : 0;
-  return Math.floor(Math.random() * maxID ** maxID);
+  return maxID + 1;
 };
 
 app.post("/api/persons", (request, response) => {
@@ -93,11 +104,11 @@ app.post("/api/persons", (request, response) => {
     name: body.name,
     number: body.number,
   };
-  persons.concat(person);
+  persons = persons.concat(person);
   response.json(person);
 });
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
