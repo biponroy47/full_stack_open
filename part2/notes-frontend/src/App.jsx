@@ -1,15 +1,14 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import Note from './components/Note';
 import Notification from './components/Notification';
-import noteService from './services/notes';
 import Footer from './components/Footer';
+import noteService from './services/notes';
 
 const App = () => {
-  const [notes, setNotes] = useState(null);
+  const [notes, setNotes] = useState([]);
   const [newNote, setNewNote] = useState('');
   const [showAll, setShowAll] = useState(true);
-  const [errorMessage, setErrorMessage] = useState('no error currently');
+  const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
     noteService.getAll().then((initialNotes) => {
@@ -17,7 +16,18 @@ const App = () => {
     });
   }, []);
 
-  if (!notes) return null;
+  const addNote = (event) => {
+    event.preventDefault();
+    const noteObject = {
+      content: newNote,
+      important: Math.random() > 0.5,
+    };
+
+    noteService.create(noteObject).then((returnedNote) => {
+      setNotes(notes.concat(returnedNote));
+      setNewNote('');
+    });
+  };
 
   const toggleImportanceOf = (id) => {
     const note = notes.find((n) => n.id === id);
@@ -30,25 +40,12 @@ const App = () => {
       })
       .catch((error) => {
         setErrorMessage(
-          `Note "${note.content}" was already removed from server`
+          `Note '${note.content}' was already removed from server`
         );
         setTimeout(() => {
           setErrorMessage(null);
         }, 5000);
-        setNotes(notes.filter((note) => note.id !== id));
       });
-  };
-
-  const addNote = (event) => {
-    event.preventDefault();
-    const noteObject = {
-      content: newNote,
-      important: Math.random() < 0.5,
-    };
-    noteService.create(noteObject).then((returnedNote) => {
-      setNotes(notes.concat(returnedNote));
-      setNewNote('');
-    });
   };
 
   const handleNoteChange = (event) => {
