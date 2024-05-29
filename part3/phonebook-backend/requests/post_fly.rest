@@ -1,0 +1,7 @@
+POST https://phonebook-backend-bipon.fly.dev/api/persons
+Content-Type: application/json
+
+{
+    "name": "Bill",
+    "number": "643-434-3434"
+}
