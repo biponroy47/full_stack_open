@@ -21,11 +21,20 @@ const noteSchema = new mongoose.Schema({
 const Note = mongoose.model("Note", noteSchema);
 
 const note = new Note({
-  content: "HTML is easy",
-  important: true,
+  content: "I am a bad coder!",
+  important: false,
 });
 
-note.save().then((result) => {
-  console.log("note saved!");
+//save note to cluster
+// note.save().then((result) => {
+//   console.log("note saved!");
+//   mongoose.connection.close();
+// });
+
+//custom search parameter for db entries
+Note.find({ important: false }).then((result) => {
+  result.forEach((note) => {
+    console.log(note);
+  });
   mongoose.connection.close();
 });
