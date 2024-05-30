@@ -1,8 +1,8 @@
 # Full Stack Open
 Projects and current progress pertaining to the Full-Stack Web Development course hosted by the University of Helsinki.
-<br>
+
 # Completed sections:
-<br>
+
 <ul>
   <li>Part 0
     <ul>
@@ -10,7 +10,7 @@ Projects and current progress pertaining to the Full-Stack Web Development cours
     </ul>
   </li>
 </ul>
-<br>
+
 <ul>
   <li>Part 1
     <ul>
@@ -20,7 +20,7 @@ Projects and current progress pertaining to the Full-Stack Web Development cours
     </ul>
   </li>
 </ul>
-<br>
+
 <ul>
   <li>Part 2
     <ul>
@@ -32,7 +32,7 @@ Projects and current progress pertaining to the Full-Stack Web Development cours
     </ul>
   </li>
 </ul>
-<br>
+
 <ul>
   <li>Part 3
     <ul>
@@ -42,9 +42,9 @@ Projects and current progress pertaining to the Full-Stack Web Development cours
     </ul>
   </li>
 </ul>
-<br>
+
 # Remaining topics:
-<br>
+
 <ul>
   <li>Part 3
     <ul>
@@ -52,7 +52,7 @@ Projects and current progress pertaining to the Full-Stack Web Development cours
     </ul>
   </li>
 </ul>
-<br>
+
 <ul>
   <li>Part 4
     <ul>
@@ -64,7 +64,7 @@ Projects and current progress pertaining to the Full-Stack Web Development cours
     </ul>
   </li>
 </ul>
-<br>
+
 <ul>
   <li>Part 5
     <ul>
@@ -76,7 +76,7 @@ Projects and current progress pertaining to the Full-Stack Web Development cours
     </ul>
   </li>
 </ul>
-<br>
+
 <ul>
   <li>Part 6
     <ul>
@@ -87,7 +87,7 @@ Projects and current progress pertaining to the Full-Stack Web Development cours
     </ul>
   </li>
 </ul>
-<br>
+
 <ul>
   <li>Part 7
     <ul>
@@ -100,7 +100,7 @@ Projects and current progress pertaining to the Full-Stack Web Development cours
     </ul>
   </li>
 </ul>
-<br>
+
 <ul>
   <li>Part 8
     <ul>
@@ -112,7 +112,7 @@ Projects and current progress pertaining to the Full-Stack Web Development cours
     </ul>
   </li>
 </ul>
-<br>
+
 <ul>
   <li>Part 9
     <ul>
@@ -124,7 +124,7 @@ Projects and current progress pertaining to the Full-Stack Web Development cours
     </ul>
   </li>
 </ul>
-<br>
+
 <ul>
   <li>Part 10
     <ul>
@@ -135,7 +135,7 @@ Projects and current progress pertaining to the Full-Stack Web Development cours
     </ul>
   </li>
 </ul>
-<br>
+
 <ul>
   <li>Part 11
     <ul>
@@ -147,7 +147,7 @@ Projects and current progress pertaining to the Full-Stack Web Development cours
     </ul>
   </li>
 </ul>
-<br>
+
 <ul>
   <li>Part 12
     <ul>
@@ -157,7 +157,7 @@ Projects and current progress pertaining to the Full-Stack Web Development cours
     </ul>
   </li>
 </ul>
-<br>
+
 <ul>
   <li>Part 13
     <ul>
