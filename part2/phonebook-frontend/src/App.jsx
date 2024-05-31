@@ -7,7 +7,10 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filter, setFilter] = useState("");
-  const [newNotification, setNotification] = useState(null);
+  const [newNotification, setNotification] = useState({
+    message: null,
+    status: null,
+  });
 
   useEffect(() => {
     personService.getAll().then((personsData) => {
@@ -17,86 +20,103 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault();
-    if (persons.filter((person) => person.name === newName).length > 0) {
-      if (window.confirm(`${newName} already exists, replace number?`)) {
-        const oldPerson = persons.filter((person) => person.name === newName);
-        const newPerson = {
-          name: newName,
-          number: newNumber,
-        };
+    const oldPerson = persons.find((person) => person.name === newName);
+    const newPerson = {
+      name: newName,
+      number: newNumber,
+    };
+    if (oldPerson) {
+      if (window.confirm(`${newName}: replace number?`)) {
         personService
-          .update(oldPerson[0].id, newPerson)
+          .update(oldPerson.id, newPerson)
           .then((updatedPerson) => {
             setPersons(
               persons.map((person) =>
                 person.id !== updatedPerson.id ? person : updatedPerson
               )
             );
+            setNotification({
+              message: `${newPerson.name}: number updated.`,
+              status: true,
+            });
           })
           .catch((error) => {
-            setNotification(`"${newPerson.name}" does not exist!`);
-            setTimeout(() => {
-              setNotification(null);
-            }, 3000);
+            console.log(error.response.data.error);
+            setNotification({
+              message: `${error.response.data.error}`,
+              status: false,
+            });
           });
-        setNotification(`"${newPerson.name}" has been updated.`);
-        setTimeout(() => {
-          setNotification(null);
-        }, 3000);
-
-        clearInputs();
-      } else clearInputs();
+      }
     } else {
-      const newPerson = {
-        name: newName,
-        number: newNumber,
-      };
-      personService.create(newPerson).then((addedPerson) => {
-        setPersons(persons.concat(addedPerson));
-      });
-      setNotification(`"${newPerson.name}" has been added.`);
-      setTimeout(() => {
-        setNotification(null);
-      }, 3000);
-      clearInputs();
+      personService
+        .create(newPerson)
+        .then((addedPerson) => {
+          setPersons(persons.concat(addedPerson));
+          setNotification({
+            message: `${newPerson.name}: added.`,
+            status: true,
+          });
+        })
+        .catch((error) => {
+          console.log(error.response.data.error);
+          setNotification({
+            message: `${error.response.data.error}`,
+            status: false,
+          });
+        });
     }
+    setTimeout(() => {
+      setNotification({
+        message: null,
+        status: null,
+      });
+    }, 3000);
+    clearInputs();
   };
 
   const deletePerson = (id) => {
-    const thisPerson = persons.filter((person) => person.id === id);
-    if (window.confirm(`Delete ${thisPerson[0].name}?`)) {
+    const thisPerson = persons.find((person) => person.id === id);
+    if (window.confirm(`${thisPerson.name}: delete?`)) {
       personService
         .remove(id)
         .then((deletedPerson) => {
           setPersons(persons.filter((person) => person.id !== id));
         })
         .catch((error) => {
-          setNotification(`"${thisPerson[0].name}" does not exist!.`);
-          setTimeout(() => {
-            setNotification(null);
-          }, 3000);
+          setNotification({
+            message: `${thisPerson.name} does not exist.`,
+            status: false,
+          });
         });
-      setNotification(`"${thisPerson[0].name}" has been deleted.`);
+      setNotification({
+        message: `${thisPerson.name}" has been deleted.`,
+        status: true,
+      });
       setTimeout(() => {
-        setNotification(null);
+        setNotification({
+          message: null,
+          status: null,
+        });
       }, 3000);
     }
   };
 
   const handleNameChange = (event) => setNewName(event.target.value);
   const handleNumberChange = (event) => setNewNumber(event.target.value);
-
+  const handleFilterChange = (event) => setFilter(event.target.value);
   const clearInputs = () => {
     setNewName("");
     setNewNumber("");
   };
 
-  const handleFilterChange = (event) => setFilter(event.target.value);
-
   return (
     <div>
       <h1>Phonebook</h1>
-      <Notification message={newNotification} />
+      <Notification
+        message={newNotification.message}
+        status={newNotification.status}
+      />
       <Filter handleFilterChange={handleFilterChange} />
       <h2>Add a New Number</h2>
       <PersonForm
