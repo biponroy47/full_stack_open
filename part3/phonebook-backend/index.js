@@ -17,21 +17,23 @@ const errorHandler = (error, request, response, next) => {
   console.error(error.message);
   if (error.name === "CastError")
     return response.status(400).send({ error: "malformatted id" });
+  else if (error.name === "ValidationError")
+    return response.status(400).json({ error: error.message });
   next(error);
 };
 
-const unknownEndpoint = (request, response) => {
-  response.status(404).send({ error: "unknown endpoint" });
-};
-
 app.use(cors());
-app.use(express.static("dist"));
 app.use(express.json());
+app.use(express.static("dist"));
 app.use(requestLogger);
 app.use((request, response, next) => {
   if (request.method === "POST") morgan("tiny")(request, response, next);
   else next();
 });
+
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: "unknown endpoint" });
+};
 
 app.get("/", (request, response) => {
   response.send("<h1>Phonebook REST Application.</h1>");
@@ -52,6 +54,20 @@ app.get("/info", (request, response) => {
   });
 });
 
+app.post("/api/persons", (request, response, next) => {
+  const body = request.body;
+  const person = new Person({
+    name: body.name,
+    number: body.number,
+  });
+  person
+    .save()
+    .then((newPerson) => {
+      response.json(newPerson);
+    })
+    .catch((error) => next(error));
+});
+
 app.get("/api/persons/:id", (request, response, next) => {
   Person.findById(request.params.id)
     .then((person) => {
@@ -69,34 +85,13 @@ app.delete("/api/persons/:id", (request, response, next) => {
     .catch((error) => next(error));
 });
 
-app.post("/api/persons", (request, response) => {
-  const body = request.body;
-  if (body.name === undefined) {
-    return response.status(400).json({
-      error: "Missing name",
-    });
-  }
-  if (body.number === undefined) {
-    return response.status(400).json({
-      error: "Missing number",
-    });
-  }
-  const person = new Person({
-    name: body.name,
-    number: body.number,
-  });
-  person.save().then((newPerson) => {
-    response.json(newPerson);
-  });
-});
-
 app.put("/api/persons/:id", (request, response, next) => {
-  const body = request.body;
-  const person = {
-    name: body.name,
-    number: body.number,
-  };
-  Person.findByIdAndUpdate(request.params.id, person, { new: true })
+  const { name, number } = request.body;
+  Person.findByIdAndUpdate(
+    request.params.id,
+    { name, number },
+    { new: true, runValidators: true, context: "query" }
+  )
     .then((updatedPerson) => {
       response.json(updatedPerson);
     })
