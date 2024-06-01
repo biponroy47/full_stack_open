@@ -39,19 +39,12 @@ Projects and current progress pertaining to the Full-Stack Web Development cours
       <li>a Node.js and Express</li>
       <li>b Deploying app to internet</li>
       <li>c Saving data to MongoDB</li>
+      <li>d Validation and ESLint</li>
     </ul>
   </li>
 </ul>
 
 # Remaining topics:
-
-<ul>
-  <li>Part 3
-    <ul>
-      <li>d Validation and ESLint</li>
-    </ul>
-  </li>
-</ul>
 
 <ul>
   <li>Part 4
