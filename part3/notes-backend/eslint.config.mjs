@@ -4,7 +4,7 @@ import stylisticPlugin from '@stylistic/eslint-plugin-js'
 
 export default [
   {
-    ignores: ['dist'],
+    ignores: ['dist/'],
     files: ['**/*.js'],
     languageOptions: {
       ecmaVersion: 'latest',
