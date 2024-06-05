@@ -4,12 +4,12 @@ const requestLogger = (request, response, next) => {
   logger.info('Method:', request.method)
   logger.info('Path:  ', request.path)
   logger.info('Body:  ', request.body)
-  logger.info('---')
+  logger.info('----------------------------')
   next()
 }
 
 const unknownEndpoint = (request, response) => {
-  response.status(404).send({ error: 'unknown endpoint' })
+  response.status(404).send({ error: 'Unknown Endpoint' })
 }
 
 const errorHandler = (error, request, response, next) => {
