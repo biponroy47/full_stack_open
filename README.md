@@ -94,6 +94,7 @@ Projects and current progress pertaining to the Full-Stack Web Development cours
   </li>
 </ul>
 
+# Optional topics:
 <ul>
   <li>Part 8
     <ul>
