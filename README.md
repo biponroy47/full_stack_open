@@ -44,12 +44,19 @@ Projects and current progress pertaining to the Full-Stack Web Development cours
   </li>
 </ul>
 
+<ul>
+  <li>Part 4
+    <ul>
+      <li>a Structure of backend application, introduction to testing</li>
+    </ul>
+  </li>
+</ul>
+
 # Remaining topics:
 
 <ul>
   <li>Part 4
     <ul>
-      <li>a Structure of backend application, introduction to testing</li>
       <li>b Testing the backend</li>
       <li>c User administration</li>
       <li>d Token authentication</li>
