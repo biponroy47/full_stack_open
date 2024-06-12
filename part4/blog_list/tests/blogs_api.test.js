@@ -61,6 +61,18 @@ test('likes default to 0 if not specified ', async () => {
   assert.strictEqual(addedBlog.likes, 0)
 })
 
+test('missing title or url', async () => {
+  const newBlog = {
+    author: 'bipon',
+    url: 'www.wesbite.com',
+  }
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+    .expect('Content-Type', /application\/json/)
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
