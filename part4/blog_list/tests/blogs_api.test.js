@@ -14,7 +14,7 @@ beforeEach(async () => {
   await Promise.all(promiseArray)
 })
 
-test('notes are returned as json', async () => {
+test('blogs are returned as json', async () => {
   await api
     .get('/api/blogs')
     .expect(200)
@@ -49,16 +49,17 @@ test('a valid note can be added ', async () => {
   assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length + 1)
 })
 
-// test('likes default to 0 if not specified ', async () => {
-//   const newBlog = {
-//     title: 'woohoo!',
-//     author: 'bipon',
-//     url: 'www.wesbite.com',
-//   }
-//   await api.post('/api/blogs').send(newBlog)
-//   const addedBlog = await helper.blogsInDb
-//   assert.strictEqual(addedBlog[2].likes, 0)
-// })
+test('likes default to 0 if not specified ', async () => {
+  const newBlog = {
+    title: 'woohoo!',
+    author: 'bipon',
+    url: 'www.wesbite.com',
+  }
+  await api.post('/api/blogs').send(newBlog)
+  const updatedBlogs = await helper.blogsInDb()
+  const addedBlog = updatedBlogs.find((blog) => blog.title === 'woohoo!')
+  assert.strictEqual(addedBlog.likes, 0)
+})
 
 after(async () => {
   await mongoose.connection.close()
