@@ -3,5 +3,6 @@ Content-Type: application/json
 
 {
     "content": "this is a note using rest client",
-    "important": false
+    "important": false,
+    "userId": "666b68d2cf302c1ede57274a"
 }
